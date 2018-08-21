@@ -6,12 +6,6 @@ pipeline {
                 echo 'hello jenkins!'
             }
         }
-        stage('test') {
-            steps {
-                echo 'in stage test...'
-                sh 'ruby ./my_script.rb'
-            }
-        }
         stage('build-docker') {
             steps {
                 echo 'in stage build-docker...'
