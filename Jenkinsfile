@@ -1,5 +1,5 @@
 pipeline {
-    agent { docker { image 'ruby:2.5' } }
+    agent any
     stages {
         stage('build') {
             steps {
@@ -8,18 +8,21 @@ pipeline {
         }
         stage('test') {
             steps {
+                echo 'in stage test...'
                 sh 'ruby ./my_script.rb'
             }
         }
         stage('build-docker') {
             steps {
-                sh 'docker build -t docker-challenge1:latest'
+                echo 'in stage build-docker...'
+                sh 'docker build -t docker-jenkins:latest .'
             }
         }
 
         stage('run-docker') {
             steps {
-                sh 'docker run docker-challenge1:latest'
+                echo 'in stage run-docker...'
+                sh 'docker run --rm docker-jenkins:latest'
             }
         }
     }
