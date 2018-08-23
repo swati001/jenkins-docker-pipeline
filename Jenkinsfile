@@ -16,7 +16,8 @@ pipeline {
         stage('run-docker') {
             steps {
                 echo 'in stage run-docker...'
-                sh 'docker run --rm docker-jenkins:latest'
+                sh 'docker run --rm -d -v /var/run/docker.sock:/var/run/docker.sock \
+              -v $(which docker):/usr/bin/docker docker-jenkins:latest'
             }
         }
     }
