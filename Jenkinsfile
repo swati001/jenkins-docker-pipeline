@@ -9,7 +9,8 @@ pipeline {
         stage('build-docker') {
             steps {
                 echo 'in stage build-docker...'
-                sh 'docker build -t docker-jenkins:latest .'
+                sh 'docker build -d -v /var/run/docker.sock:/var/run/docker.sock \
+              -v $(which docker):/usr/bin/docker -t docker-jenkins:latest .'
             }
         }
 
