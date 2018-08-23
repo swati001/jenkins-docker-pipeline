@@ -10,7 +10,7 @@ pipeline {
             steps {
                 echo 'in stage build-docker...'
                 sh 'docker build -d -v /var/run/docker.sock:/var/run/docker.sock \
-              -v $(which docker):/usr/bin/docker -t docker-jenkins:latest .'
+              -v jenkins_home:/var/jenkins_home -t docker-jenkins:latest .'
             }
         }
 
