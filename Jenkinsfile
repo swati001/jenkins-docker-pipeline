@@ -1,25 +1,25 @@
 pipeline {
-    agent any
+    agent { docker { image 'ruby:2.5' } }
     stages {
         stage('build') {
             steps {
                 echo 'hello jenkins!'
             }
         }
-        
+        stage('test') {
+            steps {
+                sh 'ruby ./hello_script.rb'
+            }
+        }
         stage('build-docker') {
             steps {
-                echo 'in stage build-docker...'
-                sh 'docker build -d -v /var/run/docker.sock:/var/run/docker.sock \
-              -v jenkins_home:/var/jenkins_home -t docker-jenkins:latest .'
+                sh 'docker build -t docker-jenkins:${env.BUILD_NUMBER} .'
             }
         }
 
         stage('run-docker') {
             steps {
-                echo 'in stage run-docker...'
-                sh 'docker run --rm -d -v /var/run/docker.sock:/var/run/docker.sock \
-              -v $(which docker):/usr/bin/docker docker-jenkins:latest'
+                sh 'docker --rm run -it --name my-running-script:${env.BUILD_NUMBER} docker-jenkins:${env.BUILD_NUMBER}'
             }
         }
     }
