@@ -1,23 +1,38 @@
 version: "3"
 services:
-  selenium:
+  hub:
     image: selenium/hub
     ports:
       - "4444:4444"
   firefoxnode:
       image: selenium/node-firefox
       environment:
-        - HUB_PORT_4444_TCP_ADDR=selenium
+        - HUB_PORT_4444_TCP_ADDR=hub
         - HUB_PORT_4444_TCP_PORT=4444
       ports:
         - "5555"
       depends_on:
-        - selenium
+        - hub
+  chromenode:
+      image: selenium/node-chrome
+      environment:
+        - HUB_PORT_4444_TCP_ADDR=hub
+        - HUB_PORT_4444_TCP_PORT=4444
+      ports:
+        - "5556"
+      depends_on:
+        - hub
+      build: .
+      command: cucumber -f pretty
   cucumber-phantomjs:
       build: .
       command: bundle exec cucumber -p poltergeist -f pretty
       volumes:
         - .:/myapp
+      environment:
+        - HUB_PORT_4444_TCP_ADDR=hub
+        - HUB_PORT_4444_TCP_PORT=4444
       ports:
         - "4777:4777"
+    
     
